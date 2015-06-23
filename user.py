@@ -63,12 +63,11 @@ def createComps(hostname=socket.gethostname()):
     return [rh, kf]
 
 def connectComps():
-    if servo != None:
-        rtm.connectPorts(rh.port("gyrometer"), kf.port("rate"))
-        rtm.connectPorts(rh.port("gsensor"), kf.port("acc"))
+    rtm.connectPorts(rh.port("gyrometer"), kf.port("rate"))
+    rtm.connectPorts(rh.port("gsensor"),   kf.port("acc"))
 
-    rtm.connectPorts(rh.port("qCur"),     seq.port("qInit"))
-    rtm.connectPorts(seq.port("qRef"),    servo.port("qRef"))
+    rtm.connectPorts(rh.port("qCur"),   seq.port("qInit"))
+    rtm.connectPorts(seq.port("qRef"),  servo.port("qRef"))
 
 def setupLogger():
     print "dummy"
@@ -76,16 +75,11 @@ def setupLogger():
 def saveLog(fname='sample'):
     print 'saved'
 
+def goInital():
+    seq_svc.setJointAngles(bodyinfo.makeCommandPose(bodyinfo.initialPose), bodyinfo.timeToInitialPose)
+
 def goHalfSitting():
-    pose = [ -30, 0, 0, 58, 0, -28,
-             -30, 0, 0, 58, 0, -28,
-             0, 0, 0,
-             0, 0, 0,
-             10, -5, 0, -30, 0, 0, 0,
-             0, 0, 0, 0, 0, 0,
-             10,  5, 0, -30, 0, 0, 0,
-             0, 0, 0, 0, 0, 0 ]
-    seq_svc.setJointAngles(bodyinfo.makeCommandPose(pose), 5.0)
+    seq_svc.setJointAngles(bodyinfo.makeCommandPose(bodyinfo.halfsitPose), bodyinfo.timeToHalfsitPose)
 
 def test():
     seq_svc.isEmpty()
